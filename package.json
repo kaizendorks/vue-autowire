@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "tbd"
+    "url": "git+https://github.com:kaizendorks/vue-autowire.git"
   },
   "keywords": [
     "vue",
