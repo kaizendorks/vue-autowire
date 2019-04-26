@@ -26,6 +26,14 @@ function filterFiles(files, pattern) {
 }
 
 /**
+ * Filter folder by adding a dot in front, then filter by pattern within that set.
+ */
+function _filterComponentFiles(files, componentOptions) {
+  let filesInFolder = filterFiles(files, RegExp(`^\\.${componentOptions.folder}`));
+  return filterFiles(filesInFolder, componentOptions.pattern);
+}
+
+/**
  * Register ruoter files by loading them with webpack.require and wire up Router instance to Vue
  * @param {Vue} Vue VueJS instance
  * @param {require} requireInstance
