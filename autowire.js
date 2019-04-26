@@ -12,7 +12,7 @@ const _defaults = {
   @param {Object} df Defults object
   @returns {Object}
  */
-function defaults(or, df) {
+function insertDefaults(or, df) {
   for (let p in df) {
     if (!or.hasOwnProperty(p)) or[p] = df[p];
   }
@@ -58,7 +58,7 @@ function registerRoutes(Vue, requireInstance, routeFiles) {
   @returns {Object} Parsed options
  */
 function parseOptions(options) {
-  options = defaults(options, _defaults);
+  options = insertDefaults(options, _defaults);
   return options;
 }
 
