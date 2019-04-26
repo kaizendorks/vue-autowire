@@ -21,37 +21,6 @@ function defaults(or, df) {
 }
 
 /**
-  Ignores routers, routerPattern, and context keys
-  @param {Object} options User defined options to be parsed
-  @returns {Object} Options with entities and their folders
- */
-function folderize(options) {
-  let ignore = ['routers', 'routerPattern', 'context'];
-  for (let key in options) {
-    key = String(key);
-    if (ignore.indexOf(key) === -1) {
-      let folderMatch = key.match(/Folder$/);
-      if (folderMatch) {
-        // If key is a folder decleration, then add the identifier
-        let identifier = key.slice(0, folderMatch.index);
-        // If identifier is not there add it.
-        if (!options.hasOwnProperty(identifier)) {
-          options[identifier] = true;
-        }
-      } else {
-        // If this identifier is true then check if folder decleration is there
-        let folder = `${key}Folder`;
-        if (!options.hasOwnProperty(folder)) {
-          // If there is no folder decleration add it.
-          options[folder] = `/${key}`;
-        }
-      }
-    }
-  }
-  return options;
-}
-
-/**
  *
  * @param {String[]} files
  * @param {RegExp} pattern
@@ -89,7 +58,7 @@ function registerRoutes(Vue, requireInstance, routeFiles) {
   @returns {Object} Parsed options
  */
 function parseOptions(options) {
-  options = folderize(defaults(options, _defaults));
+  options = defaults(options, _defaults);
   return options;
 }
 
