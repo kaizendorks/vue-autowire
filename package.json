@@ -16,5 +16,8 @@
     "autowire"
   ],
   "author": "Kaizen Dorks <kaizendorks@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "deepmerge": "^3.2.0"
+  }
 }

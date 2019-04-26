@@ -1,23 +1,12 @@
 'use strict';
 import Router from 'vue-router';
+import deepmerge from 'deepmerge';
 
 const _defaults = {
-  routers: true,
-  routerPattern: /\.router.js/,
-}
-
-/**
-  Fill in missing values of original object with values from default object
-  @param {Object} or Original object
-  @param {Object} df Defults object
-  @returns {Object}
- */
-function insertDefaults(or, df) {
-  for (let p in df) {
-    if (!or.hasOwnProperty(p)) or[p] = df[p];
-  }
-
-  return or;
+  routes: {
+    enabled: true,
+    pattern: /\.router.js/
+  },
 }
 
 /**
@@ -58,15 +47,14 @@ function registerRoutes(Vue, requireInstance, routeFiles) {
   @returns {Object} Parsed options
  */
 function parseOptions(options) {
-  options = insertDefaults(options, _defaults);
-  return options;
+  return deepmerge(_defaults, options);
 }
 
 function register(options, context, Vue) {
   let aw = {}
   options = parseOptions(options);
-  if (options.routers) {
-    aw.router = registerRoutes(Vue, context, filterFiles(context.keys(), options.routerPattern));
+  if (options.routes.enabled) {
+    aw.router = registerRoutes(Vue, context, filterFiles(context.keys(), options.routes.pattern));
   }
   return aw;
 }
