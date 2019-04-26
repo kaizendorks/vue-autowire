@@ -7,6 +7,11 @@ const _defaults = {
     enabled: true,
     pattern: /\.router.js/
   },
+  components: {
+    enabled: false,
+    folder: '/components',
+    pattern: /\.vue$/
+  }
 }
 
 /**
