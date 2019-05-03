@@ -56,6 +56,22 @@ function registerRoutes(Vue, requireInstance, routeFiles) {
 }
 
 /**
+ * Register ruoter files by loading them with webpack.require and wire up Router instance to Vue
+ * @param {Vue} Vue VueJS instance
+ * @param {require} requireInstance
+ * @param {String[]} componentsFiles
+ */
+function registerComponents(Vue, requireInstance, componentsFiles) {
+  componentsFiles.forEach(function registerComponents_forEach(file) {
+    const name = path.basename(file, '.vue');
+    const vueFile = requireInstance(file);
+    const component = vueFile.hasOwnProperty('default') ? vueFile.default : vueFile;
+
+    Vue.component(name, component);
+  });
+}
+
+/**
   @param {Object} options User defined options to be parsed
   @returns {Object} Parsed options
  */
@@ -64,10 +80,13 @@ function parseOptions(options) {
 }
 
 function register(options, context, Vue) {
-  let aw = {}
+  let aw = {}  // Returned autowiring object
   options = parseOptions(options);
   if (options.routes.enabled) {
     aw.router = registerRoutes(Vue, context, filterFiles(context.keys(), options.routes.pattern));
+  }
+  if (options.components.enabled) {
+    registerComponents(Vue, context, _filterComponentFiles(context.keys(), options.components));
   }
   return aw;
 }
