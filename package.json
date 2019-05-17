@@ -2,22 +2,60 @@
   "name": "vue-autowire",
   "version": "0.1.0",
   "description": "Autowiring plugin for VueJS",
-  "main": "autowire.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "author": "Kaizen Dorks <kaizendorks@gmail.com>",
+  "license": "MIT",
+  "main": "dist/vue-autowire.common.js",
+  "module": "dist/vue-autowire.esm.js",
+  "unpkg": "dist/vue-autowire.js",
+  "jsdelivr": "dist/vue-autowire.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com:kaizendorks/vue-autowire.git"
   },
+  "files": [
+    "src/*.js",
+    "dist/*.js"
+  ],
   "keywords": [
     "vue",
     "vuejs",
     "autowire"
   ],
-  "author": "Kaizen Dorks <kaizendorks@gmail.com>",
-  "license": "MIT",
-  "dependencies": {
-    "deepmerge": "^3.2.0"
-  }
+  "scripts": {
+    "dev:dist": "rollup -wm -c build/rollup.dev.config.js",
+    "build": "node build/build.js",
+    "lint": "eslint src test examples",
+    "test": "npm run lint && npm run test:unit && npm run test:e2e",
+    "test:unit": "echo TODO-JEST",
+    "test:e2e": "echo TODO-NIGHTWATCH",
+    "docs": "vuepress dev docs-src",
+    "docs:build": "vuepress build docs-src"
+  },
+  "gitHooks": {
+    "pre-commit": "lint-staged",
+    "commit-msg": "node scripts/verifyCommitMsg.js"
+  },
+  "lint-staged": {
+    "*.{js,vue}": [
+      "eslint --fix",
+      "git add"
+    ]
+  },
+  "devDependencies": {
+    "buble": "^0.19.3",
+    "eslint": "^4.19.1",
+    "eslint-plugin-vue-libs": "^2.1.0",
+    "lint-staged": "^8.1.0",
+    "rollup": "^0.56.4",
+    "rollup-plugin-buble": "^0.19.2",
+    "rollup-plugin-commonjs": "^9.0.0",
+    "rollup-plugin-flow-no-whitespace": "^1.0.0",
+    "rollup-plugin-node-resolve": "^3.0.3",
+    "rollup-plugin-replace": "^2.0.0",
+    "vuepress": "^0.14.1"
+  },
+  "bugs": {
+    "url": "https://github.com/kaizendorks/vue-autowire/issues"
+  },
+  "homepage": "https://github.com/kaizendorks/vue-autowire#readme"
 }

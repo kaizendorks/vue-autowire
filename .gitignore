@@ -1,2 +1,10 @@
 .DS_Store
 node_modules
+test/e2e/reports
+test/e2e/screenshots
+selenium-debug.log
+dist/*.gz
+dist/*.map
+docs/.vuepress/dist
+.idea
+.vscode/settings.json
