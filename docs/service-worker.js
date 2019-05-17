@@ -21,7 +21,7 @@ importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox
 self.__precacheManifest = [
   {
     "url": "404.html",
-    "revision": "bab5639291e1eaae2bfc902f6fa4aa78"
+    "revision": "16f66504dea4833c075841c9b3d06f75"
   },
   {
     "url": "assets/css/0.styles.26b306d6.css",
@@ -72,40 +72,40 @@ self.__precacheManifest = [
     "revision": "37129b0472e2153021241e95ae09313d"
   },
   {
-    "url": "assets/js/app.457622d3.js",
-    "revision": "a5304978a5e5434ed1efc24ea5e00531"
+    "url": "assets/js/app.f7e28de3.js",
+    "revision": "ede01344a20ce713df2b5b975e911cc8"
   },
   {
     "url": "guide/index.html",
-    "revision": "d5ee074d61a8e9b7b375bed35acf9194"
+    "revision": "266a4e79c827f0b0f347dbc02fa731ed"
   },
   {
     "url": "guide/registering-components.html",
-    "revision": "d5c2c5bd9adeebdf742ad4495b679b7a"
+    "revision": "7a99cf6ca9ffa327eea4c5e8bb3fbd89"
   },
   {
     "url": "guide/registering-directives.html",
-    "revision": "9d2a6257c4908083cb9cd7bb1e57e967"
+    "revision": "e91e4aa047c0a74a8ae5845682ee69e8"
   },
   {
     "url": "guide/registering-mixins.html",
-    "revision": "b69f01c0be48b31e1ffda854cfc1dfd2"
+    "revision": "71521e63ba18625986d03ed65cef724c"
   },
   {
     "url": "guide/registering-routes.html",
-    "revision": "81fdc074987fafa60aa590565ef0cc76"
+    "revision": "422fbb7dc3e72f0259463bc63c7426ea"
   },
   {
     "url": "guide/registering-views.html",
-    "revision": "704033f38e276fb99efb34be0f9c9336"
+    "revision": "92bbc22e345e088e2431e1fae5a6d9ed"
   },
   {
     "url": "index.html",
-    "revision": "7d2e1824c09b706d1b08e12972b2f99e"
+    "revision": "e5ee8db2cca9ba7763feee4608d1c19e"
   },
   {
     "url": "installation.html",
-    "revision": "bd810802c2baf3a43aa0dc3715e33454"
+    "revision": "aa48a917c1357b1dbdaf3eb0e215bb89"
   }
 ].concat(self.__precacheManifest || []);
 workbox.precaching.suppressWarnings();

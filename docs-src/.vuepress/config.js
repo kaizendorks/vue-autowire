@@ -1,6 +1,7 @@
 module.exports = {
   serviceWorker: true,
-  // See https://vuepress.vuejs.org/guide/deploy.html#github-pages
+  // We are taking a slightly different approach from the one in https://vuepress.vuejs.org/guide/deploy.html#github-pages
+  // Instead of keeping another branch, we build from /docs-src into /docs, which github pages automatically pick
   base: '/vue-autowire/',
   dest: './docs',
   title: 'Vue Autowire',
