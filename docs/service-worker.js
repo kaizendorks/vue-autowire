@@ -21,7 +21,7 @@ importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox
 self.__precacheManifest = [
   {
     "url": "404.html",
-    "revision": "988e413da3f5d8be888efbedea6f4ae4"
+    "revision": "7c6f669e11aa7f777db0b82f16887fa8"
   },
   {
     "url": "assets/css/0.styles.26b306d6.css",
@@ -48,8 +48,8 @@ self.__precacheManifest = [
     "revision": "f61a5fe51a8d3ace3a49fb1913e3d833"
   },
   {
-    "url": "assets/js/4.c0dd3eb7.js",
-    "revision": "c2ce9a9bed2f7f0069a1d5aa08ba0ddb"
+    "url": "assets/js/4.afea4750.js",
+    "revision": "60f669bc2a649e8a30f3d54003e62962"
   },
   {
     "url": "assets/js/5.a52d3cc8.js",
@@ -72,40 +72,40 @@ self.__precacheManifest = [
     "revision": "37129b0472e2153021241e95ae09313d"
   },
   {
-    "url": "assets/js/app.6e0cee56.js",
-    "revision": "3ee29297bba43f2615470f59648ee3cc"
+    "url": "assets/js/app.1d6ce94f.js",
+    "revision": "3efedf22474672b8a141883c4e74d1a5"
   },
   {
     "url": "guide/index.html",
-    "revision": "1be9d0d5241121430fe6cde85359c661"
+    "revision": "07a19a872b214c26325af7f2768024b3"
   },
   {
     "url": "guide/registering-components.html",
-    "revision": "c4c2af67fcf51c4f8766b6d9f483be3b"
+    "revision": "2d6765dbdd6f870ec3d114076a39167d"
   },
   {
     "url": "guide/registering-directives.html",
-    "revision": "2139ded88575e038bd975300a75e3eaf"
+    "revision": "ba811cd55f5fca13dea31d60f8760661"
   },
   {
     "url": "guide/registering-mixins.html",
-    "revision": "ce98b63ae80cbea0c4f2494b0efc2f21"
+    "revision": "139842ab1a77b7a6f6e7f1828502c35f"
   },
   {
     "url": "guide/registering-routes.html",
-    "revision": "4b80a77ab55e1ef313800295c50ea1af"
+    "revision": "2386ecaa8050155d3dd87480ab6b802d"
   },
   {
     "url": "guide/registering-views.html",
-    "revision": "5e1d364d7ec1f2f7c3f01d47e4f0f79a"
+    "revision": "760e3980e0a80baae78a7c67b651008b"
   },
   {
     "url": "index.html",
-    "revision": "dc0f9620a74067d6c17abf6cf13cf60b"
+    "revision": "5e01c44878f11ce8ade5571220b17c53"
   },
   {
     "url": "installation.html",
-    "revision": "87819b70ce44991b86d144cefcca6359"
+    "revision": "1a1db2e939bb52beec155515285d1329"
   }
 ].concat(self.__precacheManifest || []);
 workbox.precaching.suppressWarnings();
