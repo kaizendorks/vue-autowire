@@ -21,7 +21,7 @@ importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox
 self.__precacheManifest = [
   {
     "url": "404.html",
-    "revision": "7c6f669e11aa7f777db0b82f16887fa8"
+    "revision": "a187604263e1d9dd07d7070416f9c3f2"
   },
   {
     "url": "assets/css/0.styles.26b306d6.css",
@@ -48,8 +48,8 @@ self.__precacheManifest = [
     "revision": "f61a5fe51a8d3ace3a49fb1913e3d833"
   },
   {
-    "url": "assets/js/4.afea4750.js",
-    "revision": "60f669bc2a649e8a30f3d54003e62962"
+    "url": "assets/js/4.0c51f0c4.js",
+    "revision": "8359a4aca2926ea2035b505458d90128"
   },
   {
     "url": "assets/js/5.a52d3cc8.js",
@@ -72,40 +72,40 @@ self.__precacheManifest = [
     "revision": "37129b0472e2153021241e95ae09313d"
   },
   {
-    "url": "assets/js/app.1d6ce94f.js",
-    "revision": "3efedf22474672b8a141883c4e74d1a5"
+    "url": "assets/js/app.34f7c533.js",
+    "revision": "e9ac3127a7c91d0cdf1ae4205f4eb5ae"
   },
   {
     "url": "guide/index.html",
-    "revision": "07a19a872b214c26325af7f2768024b3"
+    "revision": "0fdb9c4d44454ed8c3a5252f55d249ca"
   },
   {
     "url": "guide/registering-components.html",
-    "revision": "2d6765dbdd6f870ec3d114076a39167d"
+    "revision": "4055f79c97f2b359527aa8b6050ce7d3"
   },
   {
     "url": "guide/registering-directives.html",
-    "revision": "ba811cd55f5fca13dea31d60f8760661"
+    "revision": "6e7d05cf1890b8b15549ba8a22890b10"
   },
   {
     "url": "guide/registering-mixins.html",
-    "revision": "139842ab1a77b7a6f6e7f1828502c35f"
+    "revision": "2edbd6709d05fb398c39091ff4ee9fc9"
   },
   {
     "url": "guide/registering-routes.html",
-    "revision": "2386ecaa8050155d3dd87480ab6b802d"
+    "revision": "e791aeab4ecd3376521fbda5d25592db"
   },
   {
     "url": "guide/registering-views.html",
-    "revision": "760e3980e0a80baae78a7c67b651008b"
+    "revision": "f285ff5ec03f5562c9aa07a65a0b00bb"
   },
   {
     "url": "index.html",
-    "revision": "5e01c44878f11ce8ade5571220b17c53"
+    "revision": "445b2a5ac9431161fa5d3652d65a6cb3"
   },
   {
     "url": "installation.html",
-    "revision": "1a1db2e939bb52beec155515285d1329"
+    "revision": "791fcbf3392980c1d2765c9eba4e0534"
   }
 ].concat(self.__precacheManifest || []);
 workbox.precaching.suppressWarnings();
