@@ -8,45 +8,65 @@
 var _defaults = {
   routes: {
     enabled: true,
-    pattern: /\.router.js$/
+    requireContext: null
   },
   components: {
     enabled: true,
-    pattern: /\/components\/.*\.vue$/
+    requireContext: null,
+    requireAsyncContext: null
   }
 };
 
 /**
  * Load router files
  * @param {Vue} Vue VueJS instance
- * @param {Object} options
+ * @param {Object} routesOptions
  */
-function registerRoutes (Vue, options) {
-  var routeFiles = options.requireContext
-    .keys()
-    .filter(function (file) { return file.match(options.routes.pattern); });
+function registerRoutes (Vue, routesOptions) {
+  // Setup webpack's require context. See https://github.com/webpack/docs/wiki/context#context-module-api
+  var requireContext = routesOptions.requireContext || require.context(
+    // root folder for routes
+    // relies on vue-cli setting a webpack alias of '@' to the project's /src folder
+    '@/',
+    // recursive
+    true,
+    // include all .router.js files
+    /\.router.js$/);
 
+  // Ask webpack to list the files (In sync mode, require.context already adds all files to bundle)
+  var routeFiles = requireContext.keys();
+
+  // Return them all loaded, so users can pass them onto their VueRouter declaration
   return routeFiles.map(function (routeFile) {
-    var routerConfig = options.requireContext(routeFile);
+    var routerConfig = requireContext(routeFile);
     return routerConfig.default ? routerConfig.default : routerConfig;
   });
 }
 
 /**
- * Register components files using Vue.component and requiring the file from the context
+ * Register components files using Vue.component and requiring the file from webpack's context
  * @param {Vue} Vue VueJS instance
- * @param {Object} options
+ * @param {Object} componentOptions
  */
-function registerComponents (Vue, options) {
-  var componentsFiles = options.requireContext
-    .keys()
-    .filter(function (file) { return file.match(options.components.pattern); });
+function registerComponents (Vue, componentOptions) {
+  // Setup webpack's require context. See https://github.com/webpack/docs/wiki/context#context-module-api
+  var requireContext = componentOptions.requireContext || require.context(
+    // root folder for components
+    // relies on vue-cli setting a webpack alias of '@' to the project's /src folder
+    '@/components',
+    // recursive
+    true,
+    // include all .vue files except for the .async.vue ones
+    /\/(?:[^.]+|(?!\.async\.vue$))\.vue$/);
 
+  // Ask webpack to list the files (In sync mode, require.context already adds all files to bundle)
+  var componentFiles = requireContext.keys();
+
+  // Register all of them in Vue
   var getFileName = function (name) { return /\/([^\/]*)\.vue$/.exec(name)[1]; };
-
-  return componentsFiles.map(function (file) {
+  return componentFiles.map(function (file) {
     var name = getFileName(file);
-    var component = options.requireContext(file);
+    var component = requireContext(file);
     // Unwrap "default" from ES6 module
     if (component.hasOwnProperty('default')) { component = component.default; }
     Vue.component(name, component);
@@ -57,25 +77,34 @@ function registerComponents (Vue, options) {
 }
 
 /**
- * Register components files using Vue.component as async components by setting up a factory function using the requireAsyncContext
+ * Register components files using Vue.component as async components by setting up a factory function
+ * that loads the module using webpack's lazy mode
  * Each of these components will be on its own chunk
  * @param {Vue} Vue VueJS instance
- * @param {Object} options
+ * @param {Object} componentOptions
  */
-function registerAsyncComponents (Vue, options) {
-  var componentsFiles = options.requireAsyncContext
-    .keys()
-    .filter(function (file) { return file.match(options.components.pattern); });
+function registerAsyncComponents (Vue, componentOptions) {
+  // Setup webpack's require context. See https://github.com/webpack/docs/wiki/context#context-module-api
+  var requireAsyncContext = componentOptions.requireAsyncContext || require.context(
+    // root folder for components
+    // relies on vue-cli setting a webpack alias of '@' to the project's /src folder
+    '@/components',
+    // recursive
+    true,
+    // include only .async.vue components
+    /async\.vue$/,
+    // webpack's lazy mode for require.context
+    'lazy');
 
+  // Ask webpack to list the files (In lazy mode, files are added to their own chunk and only if we require them)
+  var componentFiles = requireAsyncContext.keys();
+
+  // Register all of them in Vue
   var getFileName = function (name) { return /\/([^\/]*)\.async\.vue$/.exec(name)[1]; };
-
-  return componentsFiles.map(function (file) {
+  return componentFiles.map(function (file) {
     var name = getFileName(file);
     // Register as async component https://vuejs.org/v2/guide/components-dynamic-async.html#Async-Components
-    Vue.component(
-      name,
-      function () { return options.requireAsyncContext(file); }
-    );
+    Vue.component(name, function () { return requireAsyncContext(file); });
 
     // Return the registered component
     return Vue.component(name);
@@ -91,19 +120,6 @@ function parseOptions (userOptions) {
   userOptions = userOptions || {};
 
   return {
-    // context and asyncContext are user provided using the require.context API
-    // which allows a 4th argument to specify the mode in which to load files
-    // By default this is 'sync', but can be made async as in require.context('./', true, /async\.vue$/, 'lazy')
-    // See https://github.com/webpack/docs/wiki/context#context-module-api
-    requireContext: userOptions.context,
-    requireAsyncContext: userOptions.asyncContext && userOptions.asyncContext.id.includes("lazy") ?
-      userOptions.asyncContext :
-      null,
-
-    // Async mode is enabled/disabled depending on the last argument provided to require.context
-    // For example, enable async with: require.context('./', true, /(\.js|\.vue)$/, 'lazy')
-    // async: requireContext.id.includes("lazy"),
-
     // Merge user-specific options for each of the different asset types
     routes: Object.assign({}, _defaults.routes, userOptions.routes),
     components: Object.assign({}, _defaults.components, userOptions.components)
@@ -125,14 +141,12 @@ function register (Vue, userOptions) {
     routes: [],
     components: []
   };
-  if (options.routes.enabled && options.requireContext) {
-    aw.routes.push(registerRoutes(Vue, options));
+  if (options.routes.enabled) {
+    aw.routes.push(registerRoutes(Vue, options.routes));
   }
-  if (options.components.enabled && options.requireContext) {
-    aw.components.push(registerComponents(Vue, options));
-  }
-  if (options.components.enabled && options.requireAsyncContext) {
-    aw.components.push(registerAsyncComponents(Vue, options));
+  if (options.components.enabled) {
+    aw.components.push(registerComponents(Vue, options.components));
+    aw.components.push(registerAsyncComponents(Vue, options.components));
   }
 
   return aw;
