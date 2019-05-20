@@ -1,5 +1,7 @@
 'use strict';
 
+import { getComponentName } from './utils';
+
 const _defaults = {
   routes: {
     enabled: true,
@@ -58,9 +60,8 @@ function registerComponents (Vue, componentOptions) {
   const componentFiles = requireContext.keys();
 
   // Register all of them in Vue
-  const getFileName = name => /\/([^\/]*)\.vue$/.exec(name)[1];
   return componentFiles.map(file => {
-    const name = getFileName(file);
+    const name = getComponentName(file);
     let component = requireContext(file);
     // Unwrap "default" from ES6 module
     if (component.hasOwnProperty('default')) component = component.default;
@@ -95,9 +96,8 @@ function registerAsyncComponents (Vue, componentOptions) {
   const componentFiles = requireAsyncContext.keys();
 
   // Register all of them in Vue
-  const getFileName = name => /\/([^\/]*)\.async\.vue$/.exec(name)[1];
   return componentFiles.map(file => {
-    const name = getFileName(file);
+    const name = getComponentName(file);
     // Register as async component https://vuejs.org/v2/guide/components-dynamic-async.html#Async-Components
     Vue.component(name, () => requireAsyncContext(file));
 

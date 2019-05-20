@@ -3,6 +3,13 @@
   * (c) 2019 Kaizen Dorks
   * @license MIT
   */
+function getComponentName (filePath) {
+  var fileName = filePath.split('/').pop();
+  return fileName
+    .replace(/\.js$|\.vue$/, '')
+    .replace(/\.async$/, '');
+}
+
 var _defaults = {
   routes: {
     enabled: true,
@@ -61,9 +68,8 @@ function registerComponents (Vue, componentOptions) {
   var componentFiles = requireContext.keys();
 
   // Register all of them in Vue
-  var getFileName = function (name) { return /\/([^\/]*)\.vue$/.exec(name)[1]; };
   return componentFiles.map(function (file) {
-    var name = getFileName(file);
+    var name = getComponentName(file);
     var component = requireContext(file);
     // Unwrap "default" from ES6 module
     if (component.hasOwnProperty('default')) { component = component.default; }
@@ -98,9 +104,8 @@ function registerAsyncComponents (Vue, componentOptions) {
   var componentFiles = requireAsyncContext.keys();
 
   // Register all of them in Vue
-  var getFileName = function (name) { return /\/([^\/]*)\.async\.vue$/.exec(name)[1]; };
   return componentFiles.map(function (file) {
-    var name = getFileName(file);
+    var name = getComponentName(file);
     // Register as async component https://vuejs.org/v2/guide/components-dynamic-async.html#Async-Components
     Vue.component(name, function () { return requireAsyncContext(file); });
 
