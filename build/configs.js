@@ -34,24 +34,12 @@ module.exports = [
     file: resolve('dist/vue-autowire.esm.js'),
     format: 'es'
   },
-  {
-    file: resolve('dist/vue-autowire.esm.browser.js'),
-    format: 'es',
-    env: 'development',
-    transpile: false
-  },
-  {
-    file: resolve('dist/vue-autowire.esm.browser.min.js'),
-    format: 'es',
-    env: 'production',
-    transpile: false
-  }
 ].map(genConfig)
 
 function genConfig (opts) {
   const config = {
     input: {
-      input: resolve('src/index.js'),
+      input: resolve('src/autowire.js'),
       plugins: [
         flow(),
         node(),
