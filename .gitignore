@@ -3,7 +3,8 @@ node_modules
 test/e2e/reports
 test/e2e/screenshots
 selenium-debug.log
+coverage
 dist/*.gz
 dist/*.map
 .idea
-.vscode/settings.json
+.vscode

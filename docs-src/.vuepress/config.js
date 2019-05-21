@@ -17,8 +17,8 @@ module.exports = {
       },
     ],
     sidebar: [
-      '/installation.md',
       '/',
+      '/installation.md',
       {
         title: 'Guide',
         collapsable: false,

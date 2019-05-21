@@ -89,7 +89,7 @@ function registerComponents (Vue, componentOptions) {
  */
 function registerAsyncComponents (Vue, componentOptions) {
   // Setup webpack's require context. See https://github.com/webpack/docs/wiki/context#context-module-api
-  const requireAsyncContext = componentOptions.requireAsyncContext || require.context(
+  const requireContext = componentOptions.requireAsyncContext || require.context(
     // root folder for components
     // relies on vue-cli setting a webpack alias of '@' to the project's /src folder
     '@/components',
@@ -101,13 +101,13 @@ function registerAsyncComponents (Vue, componentOptions) {
     'lazy');
 
   // Ask webpack to list the files (In lazy mode, files are added to their own chunk and only if we require them)
-  const componentFiles = requireAsyncContext.keys();
+  const componentFiles = requireContext.keys();
 
   // Register all of them in Vue
   return componentFiles.map(file => {
     const name = getComponentName(file);
     // Register as async component https://vuejs.org/v2/guide/components-dynamic-async.html#Async-Components
-    Vue.component(name, () => requireAsyncContext(file));
+    Vue.component(name, () => requireContext(file));
 
     // Return the registered component
     return Vue.component(name);
@@ -136,7 +136,7 @@ function parseOptions (userOptions) {
   * @param {require} requireContext webpack require.context instance. https://github.com/webpack/docs/wiki/context#context-module-api
   * @returns {Object} The Autowire object with all the assets that were wired
  */
-function register (Vue, userOptions) {
+function autowire (Vue, userOptions) {
   const options = parseOptions(userOptions);
 
   // Returned autowiring object with registered elements
@@ -144,25 +144,16 @@ function register (Vue, userOptions) {
     routes: [],
     components: []
   };
-  if (options.routes.enabled) {
-    aw.routes.push(registerRoutes(Vue, options.routes));
-  }
+
   if (options.components.enabled) {
     aw.components.push(registerComponents(Vue, options.components));
     aw.components.push(registerAsyncComponents(Vue, options.components));
+  }
+  if (options.routes.enabled) {
+    aw.routes.push(registerRoutes(Vue, options.routes));
   }
 
   return aw;
 }
 
-/**
-  * Vue plugin definition. See https://vuejs.org/v2/guide/plugins.html#Writing-a-Plugin
-  * @param {Object} Vue The Vue API
-  * @param {Object} userOptions User defined options
-  * @returns {Object} The Autowire object with all the assets that were wired
- */
-function install (Vue, userOptions) {
-  Vue.autowire = register(Vue, userOptions);
-}
-
-export default install;
+export { registerComponents, registerAsyncComponents, registerRoutes, autowire };

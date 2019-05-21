@@ -1,16 +1,6 @@
-/*!
-  * vue-autowire v0.1.0
-  * (c) 2019 Kaizen Dorks
-  * @license MIT
-  */
 'use strict';
 
-function getComponentName (filePath) {
-  var fileName = filePath.split('/').pop();
-  return fileName
-    .replace(/\.js$|\.vue$/, '')
-    .replace(/\.async$/, '');
-}
+import { getComponentName } from './utils';
 
 /**
  * Load router files
@@ -20,11 +10,11 @@ function getComponentName (filePath) {
 function registerRoutes (Vue, requireContext) {
   // Ask webpack to list the files
   // By default require.context adds all files to the main bundle unless "lazy" mode is used
-  var routeFiles = requireContext.keys();
+  const routeFiles = requireContext.keys();
 
   // Return them all loaded, so users can pass them onto their VueRouter declaration
-  return routeFiles.map(function (routeFile) {
-    var routerConfig = requireContext(routeFile);
+  return routeFiles.map(routeFile => {
+    const routerConfig = requireContext(routeFile);
     return routerConfig.default ? routerConfig.default : routerConfig;
   });
 }
@@ -37,18 +27,18 @@ function registerRoutes (Vue, requireContext) {
 function registerComponents (Vue, requireContext) {
   // Ask webpack to list the files.
   // By default require.context adds all files to the main bundle unless "lazy" mode is used
-  var componentFiles = requireContext.keys();
+  const componentFiles = requireContext.keys();
 
   // Register all of them in Vue
-  return componentFiles.map(function (file) {
-    var name = getComponentName(file);
-    var component = requireContext(file);
+  return componentFiles.map(file => {
+    const name = getComponentName(file);
+    let component = requireContext(file);
     // Unwrap "default" from ES6 module
-    if (component.hasOwnProperty('default')) { component = component.default; }
+    if (component.hasOwnProperty('default')) component = component.default;
     Vue.component(name, component);
 
     // Return the registered component
-    return { name: name, component: Vue.component(name) };
+    return { name, component: Vue.component(name) };
   });
 }
 
@@ -66,14 +56,14 @@ function registerAsyncComponents (Vue, requireContext) {
   }
 
   // Ask webpack to list the files. In lazy mode, these are added to their own chunk
-  var componentFiles = requireContext.keys();
+  const componentFiles = requireContext.keys();
 
   // Register all of them in Vue as async components. See https://vuejs.org/v2/guide/components-dynamic-async.html#Async-Components
-  return componentFiles.map(function (file) {
-    var name = getComponentName(file);
-    Vue.component(name, function () { return requireContext(file); });
+  return componentFiles.map(file => {
+    const name = getComponentName(file);
+    Vue.component(name, () => requireContext(file));
     // Return the registered component
-    return { name: name, component: Vue.component(name) };
+    return { name, component: Vue.component(name) };
   });
 }
 
@@ -92,7 +82,7 @@ function autowire (Vue, conventions) {
   }, conventions);
 
   // Keep track of every asset wired by the library
-  var aw = {
+  const aw = {
     routes: [],
     components: [],
     asyncComponents: []
@@ -111,4 +101,4 @@ function autowire (Vue, conventions) {
   Vue.autowire = aw;
 }
 
-module.exports = autowire;
+export default autowire;

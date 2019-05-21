@@ -8,6 +8,7 @@
   "module": "dist/vue-autowire.esm.js",
   "unpkg": "dist/vue-autowire.js",
   "jsdelivr": "dist/vue-autowire.js",
+  "sideEffects": false,
   "repository": {
     "type": "git",
     "url": "git+https://github.com:kaizendorks/vue-autowire.git"
@@ -26,7 +27,8 @@
     "build": "node build/build.js",
     "lint": "eslint src test examples",
     "test": "npm run lint && npm run test:unit && npm run test:e2e",
-    "test:unit": "echo TODO-JEST",
+    "test:unit": "jest --config=jest.config.js",
+    "test:unit:coverage": "jest --coverage --config=jest.config.js",
     "test:e2e": "echo TODO-NIGHTWATCH",
     "docs": "vuepress dev docs-src",
     "docs:build": "vuepress build docs-src"
@@ -42,9 +44,14 @@
     ]
   },
   "devDependencies": {
+    "@babel/core": "^7.4.4",
+    "@babel/preset-env": "^7.4.4",
+    "babel-jest": "^24.8.0",
     "buble": "^0.19.3",
     "eslint": "^4.19.1",
     "eslint-plugin-vue-libs": "^2.1.0",
+    "jest": "^24.8.0",
+    "jest-when": "^2.5.0",
     "lint-staged": "^8.1.0",
     "rollup": "^0.56.4",
     "rollup-plugin-buble": "^0.19.2",
