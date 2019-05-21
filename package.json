@@ -31,11 +31,11 @@
     "test:unit:coverage": "jest --coverage --config=jest.config.js",
     "test:e2e": "echo TODO-NIGHTWATCH",
     "docs": "vuepress dev docs-src",
-    "docs:build": "vuepress build docs-src"
+    "docs:build": "vuepress build docs-src",
+    "release": "bash bin/release.sh"
   },
   "gitHooks": {
-    "pre-commit": "lint-staged",
-    "commit-msg": "node scripts/verifyCommitMsg.js"
+    "pre-commit": "lint-staged"
   },
   "lint-staged": {
     "*.{js,vue}": [

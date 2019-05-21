@@ -64,7 +64,7 @@ describe('the VueAutowire module', () => {
         });
       });
       test('can unwrap the default export of ES6 files', () => {
-        when(mockRequireContext).calledWith(mockRouteFiles[0]).mockReturnValue({ default: { a: 'set of ES6 routes' } });
+        when(mockRequireContext).calledWith(mockRouteFiles[0]).mockReturnValue({ default: { a: 'set of ES6 routes' }});
         when(mockRequireContext).calledWith(mockRouteFiles[1]).mockReturnValue({ another: 'set of routes' });
 
         VueAutowire(mockVue, Object.assign(mockConventions, {
@@ -134,7 +134,7 @@ describe('the VueAutowire module', () => {
         });
       });
       test('can unwrap the default export of ES6 files', () => {
-        when(mockRequireContext).calledWith(mockComponentFiles[0]).mockReturnValue({ default: {an: 'ES6 component' } });
+        when(mockRequireContext).calledWith(mockComponentFiles[0]).mockReturnValue({ default: { an: 'ES6 component' }});
 
         VueAutowire(mockVue, Object.assign(mockConventions, {
           components: { requireContext: mockRequireContext }
