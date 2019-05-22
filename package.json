@@ -1,6 +1,6 @@
 {
   "name": "vue-autowire",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Autowiring plugin for VueJS",
   "author": "Kaizen Dorks <kaizendorks@gmail.com>",
   "license": "MIT",
