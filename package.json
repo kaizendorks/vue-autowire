@@ -14,7 +14,7 @@
     "url": "git+https://github.com:kaizendorks/vue-autowire.git"
   },
   "files": [
-    "src/*.js",
+    "src/**/*.js",
     "dist/*.js"
   ],
   "keywords": [
