@@ -13,8 +13,8 @@ export default {
       '@/components',
       // recursive
       true,
-      // include all .vue files except for the .async.vue ones
-      /\/(?:[^.]+|(?!\.async\.vue$))\.vue$/
+      // include all .vue files except for the "".async.vue" an the ".local.vue" ones
+      /\/(?:[^.]+|(?!\.local\.vue$)|(?!\.async\.vue$))\.vue$/
     ),
     // Async components
     requireAsyncContext: require.context(
