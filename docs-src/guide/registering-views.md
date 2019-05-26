@@ -1,3 +1,0 @@
-# Registering Views
-
-WIP

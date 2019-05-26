@@ -12,23 +12,23 @@ module.exports = {
     editLinkText: 'Edit this page on GitHub',
     nav: [
       {
-        text: 'Guide',
-        link: '/guide/'
+        text: 'Conventions',
+        link: '/conventions/'
       },
     ],
     sidebar: [
       '/',
       '/installation.md',
       {
-        title: 'Guide',
+        title: 'Conventions',
         collapsable: false,
         children: [
-          '/guide/',
-          '/guide/registering-components.md',
-          '/guide/registering-views.md',
-          '/guide/registering-routes.md',
-          '/guide/registering-directives.md',
-          '/guide/registering-mixins.md',
+          '/conventions/',
+          '/conventions/components.md',
+          '/conventions/views.md',
+          '/conventions/routes.md',
+          '/conventions/directives.md',
+          '/conventions/mixins.md',
         ]
       },
     ]

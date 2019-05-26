@@ -1,3 +1,0 @@
-# Registering Directives
-
-WIP

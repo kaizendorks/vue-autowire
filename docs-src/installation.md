@@ -16,7 +16,7 @@ Within this call, you must provide the `conventions` object that defines:
 - which types of assets should be auto-wired (ie, components, views, directives, etc)
 - where should webpack find them
 
-The easiest is to use the [default conventions](./guide/README.md).
+The easiest is to use the [default conventions](./conventions/README.md).
 ``` js
 import Vue from 'vue'
 import App from './App.vue'
