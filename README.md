@@ -36,4 +36,4 @@ new Vue({
 }).$mount('#app')
 ```
 
-For more information, check the docs at https://kaizendorks.github.io/vue-autowire/
+Read through the docs at https://kaizendorks.github.io/vue-autowire/ for more information on the default conventions and understand how to create your own.
