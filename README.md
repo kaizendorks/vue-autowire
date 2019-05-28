@@ -1,6 +1,8 @@
 # vue-autowire
 > In development!
 
+[![Build Status](https://travis-ci.com/kaizendorks/vue-autowire.svg?branch=master)](https://travis-ci.com/kaizendorks/vue-autowire)
+
 Vue Autowire is a Vue plugin with conventions for automatically wiring Vue assets like components, views or directives.
 
 Quick usage on a Vue-CLI project
