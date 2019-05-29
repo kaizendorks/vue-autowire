@@ -10,6 +10,6 @@ console.log(Vue.autowire);
 Vue.config.productionTip = false;
 
 new Vue({
-  router,
+  router: router(),
   render: h => h(App)
 }).$mount('#vue-holder');

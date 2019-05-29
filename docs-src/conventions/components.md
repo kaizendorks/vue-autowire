@@ -1,6 +1,6 @@
 # Components
 
-Vue-Autowire lets you provide 2 different `require.context` instances when defining the components convention:
+Similarly to the [views](./views.md) convention, Vue-Autowire lets you provide 2 different `require.context` instances when defining the components convention:
 ```js
 Vue.use(VueAutowire, {
   components: {
@@ -35,8 +35,8 @@ It is defined as follows:
 
 Which means:
 - Assumes there is a [webpack alias](https://webpack.js.org/configuration/resolve/#resolvealias) defined as `@` which maps to the root source of the Vue application. _If you are using the Vue-CLI, this is already the case_
-- With `requireContext`, all the files inside the `@/components` folder that end with `.vue` but not with `.local.vue` nor `.async.vue` will be found. They will be registered as components within the Vue application and included in the main bundle.
-- With `requireAsyncContext`, all the files inside the `@/components` folder that end with `async.vue` will be found. They will be registered as **async** components within the Vue application and included in **their own bundle**. (One bundle per each async component)
+- With `requireContext`, all the files inside the `@/components` folder that end with `.vue` but not with `.local.vue` nor `.async.vue` will be found. They will be registered as Vue components within the Vue application and included in the main bundle.
+- With `requireAsyncContext`, all the files inside the `@/components` folder that end with `async.vue` will be found. They will be registered as **async** Vue components within the Vue application and included in **their own bundle**. (One bundle per each async component)
 
 ### Example
 Given a folder structure like
@@ -48,7 +48,7 @@ Given a folder structure like
     markdown-editor.async.vue
     /blog-entry-preview
       blog-entry-preview.async.vue
-      author-preview.local.vue  // manually imported from blog-entry-preview.async.view
+      author-preview.local.vue  // manually imported from blog-entry-preview.async.vue
   /views
     ...
   /directives

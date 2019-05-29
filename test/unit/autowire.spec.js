@@ -8,7 +8,8 @@ describe('the VueAutowire module', () => {
   beforeEach(() => {
     mockConventions = {
       routes: { requireContext: null },
-      components: { requireAsyncContext: null }
+      components: { requireContext: null, requireAsyncContext: null },
+      views: { requireContext: null, requireAsyncContext: null }
     };
 
     mockVue = {};
@@ -24,11 +25,21 @@ describe('the VueAutowire module', () => {
     expect(mockVue.autowire).toEqual({
       routes: [],
       components: [],
-      asyncComponents: []
+      asyncComponents: [],
+      views: [],
+      asyncViews: []
     });
   });
 
   describe('when route conventions are provided', () => {
+    test('returns empty array of routes when there is no routes property in the conventions', () => {
+      VueAutowire(mockVue, {});
+
+      expect(mockVue.autowire).toMatchObject({
+        routes: [],
+      });
+    });
+
     test('returns empty array of routes when no requireContext is provided in the conventions', () => {
       VueAutowire(mockVue, mockConventions);
 
@@ -84,6 +95,16 @@ describe('the VueAutowire module', () => {
   describe('when auto-wiring of components is enabled', () => {
     beforeEach(() => {
       mockVue.component = jest.fn();
+    });
+
+    test('does nothing without a components property in the conventions', () => {
+      VueAutowire(mockVue, {});
+
+      expect(mockVue.autowire).toMatchObject({
+        components: [],
+        asyncComponents: [],
+      });
+      expect(mockVue.component).not.toHaveBeenCalled();
     });
 
     test('does nothing without requireContext or requireAsyncContext provided', () => {
@@ -162,7 +183,7 @@ describe('the VueAutowire module', () => {
           VueAutowire(mockVue, Object.assign(mockConventions, {
             components: { requireAsyncContext: mockRequireAsyncContext }
           }));
-        }).toThrow('require.context for asyn components should be created in lazy mode');
+        }).toThrow('require.context for async components should be created in lazy mode');
       });
       test('registers all the components within Vue as async components', () => {
         VueAutowire(mockVue, Object.assign(mockConventions, {
@@ -194,6 +215,135 @@ describe('the VueAutowire module', () => {
           asyncComponents: [
             { name: 'my-component', component: { a: 'component' }},
             { name: 'another-component', component: { another: 'component' }},
+          ],
+        });
+      });
+    });
+  });
+
+  describe('when auto-wiring of views is enabled', () => {
+    beforeEach(() => {
+      mockVue.component = jest.fn();
+    });
+
+    test('does nothing without a views property in the conventions', () => {
+      VueAutowire(mockVue, {});
+
+      expect(mockVue.autowire).toMatchObject({
+        views: [],
+        asyncViews: [],
+      });
+      expect(mockVue.component).not.toHaveBeenCalled();
+    });
+
+    test('does nothing without requireContext or requireAsyncContext provided', () => {
+      VueAutowire(mockVue, mockConventions);
+
+      expect(mockVue.autowire).toMatchObject({
+        views: [],
+        asyncViews: [],
+      });
+      expect(mockVue.component).not.toHaveBeenCalled();
+    });
+
+    describe('when a require.context for synchronous views is provided', () => {
+      let mockRequireContext;
+      let mockViewFiles;
+      beforeEach(() => {
+        mockViewFiles = [
+          'some/path/my-view.vue',
+          'some/other/path/another-view.js'
+        ];
+        mockRequireContext = jest.fn();
+        mockRequireContext.keys = jest.fn().mockReturnValue(mockViewFiles);
+
+        when(mockRequireContext).calledWith(mockViewFiles[0]).mockReturnValue({ a: 'view' });
+        when(mockRequireContext).calledWith(mockViewFiles[1]).mockReturnValue({ another: 'view' });
+      });
+      test('registers all the views within Vue', () => {
+        VueAutowire(mockVue, Object.assign(mockConventions, {
+          views: { requireContext: mockRequireContext }
+        }));
+
+        expect(mockVue.component).toBeCalledWith('my-view', { a: 'view' });
+        expect(mockVue.component).toBeCalledWith('another-view', { another: 'view' });
+      });
+      test('returns an array with all the views that have been registered in Vue', () => {
+        when(mockVue.component).calledWith('my-view').mockReturnValue({ a: 'view' });
+        when(mockVue.component).calledWith('another-view').mockReturnValue({ another: 'view' });
+
+        VueAutowire(mockVue, Object.assign(mockConventions, {
+          views: { requireContext: mockRequireContext }
+        }));
+
+        expect(mockVue.autowire).toMatchObject({
+          views: [
+            { name: 'my-view', component: { a: 'view' }},
+            { name: 'another-view', component: { another: 'view' }},
+          ],
+        });
+      });
+      test('can unwrap the default export of ES6 files', () => {
+        when(mockRequireContext).calledWith(mockViewFiles[0]).mockReturnValue({ default: { an: 'ES6 view' }});
+
+        VueAutowire(mockVue, Object.assign(mockConventions, {
+          views: { requireContext: mockRequireContext }
+        }));
+
+        expect(mockVue.component).toBeCalledWith('my-view', { an: 'ES6 view' });
+      });
+    });
+    describe('when a require.context for asynchronous views is provided', () => {
+      let mockRequireAsyncContext;
+      let mockViewFiles;
+      beforeEach(() => {
+        mockViewFiles = [
+          'some/path/my-view.vue',
+          'some/other/path/another-view.js'
+        ];
+        mockRequireAsyncContext = jest.fn();
+        mockRequireAsyncContext.id = './src/views lazy recursive async.vue$'; // simulate require.context id
+        mockRequireAsyncContext.keys = jest.fn().mockReturnValue(mockViewFiles);
+      });
+      test('throws an error if require.context isnt initialized in lazy mode', () => {
+        mockRequireAsyncContext.id = './src/views sync recursive async.vue$';
+
+        expect(() => {
+          VueAutowire(mockVue, Object.assign(mockConventions, {
+            views: { requireAsyncContext: mockRequireAsyncContext }
+          }));
+        }).toThrow('require.context for async components should be created in lazy mode');
+      });
+      test('registers all the views within Vue as async components', () => {
+        VueAutowire(mockVue, Object.assign(mockConventions, {
+          views: { requireAsyncContext: mockRequireAsyncContext }
+        }));
+
+        // Each file should be registed in Vue using a function rather than the view itself
+        expect(mockVue.component).toBeCalledWith('my-view', expect.any(Function));
+        expect(mockVue.component).toBeCalledWith('another-view', expect.any(Function));
+
+        // The registered function simply tell the require.context to load the file
+        // as per https://vuejs.org/v2/guide/components-dynamic-async.html#Async-Components
+        mockViewFiles.forEach((mockFile, idx) => {
+          // For each file, we call Vue.component twice. One to register and another to return the registered component
+          const componentFunction = mockVue.component.mock.calls[idx * 2][1];
+          componentFunction();
+          expect(mockRequireAsyncContext).toBeCalledWith(mockFile);
+        });
+      });
+      test('returns an array with all the async views that have been registered in Vue', () => {
+        when(mockVue.component).calledWith('my-view').mockReturnValue({ a: 'view' });
+        when(mockVue.component).calledWith('another-view').mockReturnValue({ another: 'view' });
+
+        VueAutowire(mockVue, Object.assign(mockConventions, {
+          views: { requireAsyncContext: mockRequireAsyncContext }
+        }));
+
+        expect(mockVue.autowire).toMatchObject({
+          asyncViews: [
+            { name: 'my-view', component: { a: 'view' }},
+            { name: 'another-view', component: { another: 'view' }},
           ],
         });
       });
