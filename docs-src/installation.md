@@ -12,11 +12,11 @@ yarn add --dev vue-autowire
 
 Vue-Autowire is then provided as a [Vue plugin](https://vuejs.org/v2/guide/plugins.html) that you must explicitly install with `Vue.use()`.
 
-Within this call, you must provide the `conventions` object that defines:
+Within this call, you must provide the `convention` object that defines:
 - which types of assets should be auto-wired (ie, components, views, directives, etc)
-- where should webpack find them
+- what file/folder name convention should be used to find them
 
-The easiest is to use the [default conventions](./conventions/README.md).
+The easiest is to use the [default convention](./conventions/README.md).
 ``` js
 import Vue from 'vue'
 import App from './App.vue'
