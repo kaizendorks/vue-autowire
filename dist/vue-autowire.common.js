@@ -1,5 +1,5 @@
 /*!
-  * vue-autowire v0.1.3
+  * vue-autowire v0.1.4
   * (c) 2019 Kaizen Dorks
   * @license MIT
   */
@@ -94,21 +94,21 @@ function autowire (Vue, conventions) {
 
   // Wire every asset type for which there is a require.context provided
   var aw = {
-    components: conventions.components.requireContext ?
-      registerComponents(Vue, conventions.components.requireContext) :
-      [],
-    asyncComponents: conventions.components.requireAsyncContext ?
-      registerAsyncComponents(Vue, conventions.components.requireAsyncContext) :
-      [],
-    views: conventions.views.requireContext ?
-      registerComponents(Vue, conventions.views.requireContext) :
-      [],
-    asyncViews: conventions.views.requireAsyncContext ?
-      registerAsyncComponents(Vue, conventions.views.requireAsyncContext) :
-      [],
-    routes: conventions.routes.requireContext ?
-      registerRoutes(Vue, conventions.routes.requireContext) :
-      []
+    components: conventions.components.requireContext
+      ? registerComponents(Vue, conventions.components.requireContext)
+      : [],
+    asyncComponents: conventions.components.requireAsyncContext
+      ? registerAsyncComponents(Vue, conventions.components.requireAsyncContext)
+      : [],
+    views: conventions.views.requireContext
+      ? registerComponents(Vue, conventions.views.requireContext)
+      : [],
+    asyncViews: conventions.views.requireAsyncContext
+      ? registerAsyncComponents(Vue, conventions.views.requireAsyncContext)
+      : [],
+    routes: conventions.routes.requireContext
+      ? registerRoutes(Vue, conventions.routes.requireContext)
+      : []
   };
 
   // export the results into the Vue instance, so they can be inspected
