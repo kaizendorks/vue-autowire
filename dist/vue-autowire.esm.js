@@ -60,7 +60,7 @@ function registerComponents (Vue, requireContext) {
 function registerAsyncComponents (Vue, requireContext) {
   // Make sure require.context was created with lazy mode
   if (!requireContext.id.includes('lazy')) {
-    throw new Error('require.context for asyn components should be created in lazy mode. See https://github.com/webpack/docs/wiki/context#context-module-api');
+    throw new Error('require.context for async components should be created in lazy mode. See https://github.com/webpack/docs/wiki/context#context-module-api');
   }
 
   // Ask webpack to list the files. In lazy mode, these are added to their own chunk
@@ -86,26 +86,30 @@ function autowire (Vue, conventions) {
   // to our conventions and they would ALWAYS be added to the bundles, even when users do not use them
   conventions = Object.assign({
     routes: { requireContext: null },
-    components: { requireContext: null, requireAsyncContext: null }
+    components: { requireContext: null, requireAsyncContext: null },
+    views: { requireContext: null, requireAsyncContext: null }
   }, conventions);
 
-  // Keep track of every asset wired by the library
+  // Wire every asset type for which there is a require.context provided
   var aw = {
-    routes: [],
-    components: [],
-    asyncComponents: []
+    components: conventions.components.requireContext ?
+      registerComponents(Vue, conventions.components.requireContext) :
+      [],
+    asyncComponents: conventions.components.requireAsyncContext ?
+      registerAsyncComponents(Vue, conventions.components.requireAsyncContext) :
+      [],
+    views: conventions.views.requireContext ?
+      registerComponents(Vue, conventions.views.requireContext) :
+      [],
+    asyncViews: conventions.views.requireAsyncContext ?
+      registerAsyncComponents(Vue, conventions.views.requireAsyncContext) :
+      [],
+    routes: conventions.routes.requireContext ?
+      registerRoutes(Vue, conventions.routes.requireContext) :
+      []
   };
 
-  if (conventions.components.requireContext) {
-    aw.components = registerComponents(Vue, conventions.components.requireContext);
-  }
-  if (conventions.components.requireAsyncContext) {
-    aw.asyncComponents = registerAsyncComponents(Vue, conventions.components.requireAsyncContext);
-  }
-  if (conventions.routes.requireContext) {
-    aw.routes = registerRoutes(Vue, conventions.routes.requireContext);
-  }
-
+  // export the results into the Vue instance, so they can be inspected
   Vue.autowire = aw;
 }
 
