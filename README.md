@@ -3,10 +3,15 @@
 
 [![Build Status](https://travis-ci.com/kaizendorks/vue-autowire.svg?branch=master)](https://travis-ci.com/kaizendorks/vue-autowire)
 
-Vue Autowire is a Vue plugin with conventions for automatically wiring Vue assets like components, views or directives.
+Vue Autowire is a Vue plugin with conventions for automatically wiring different Vue assets:
+- components
+- views
+- directives
+- mixins
+- routes
 
 Quick usage on a Vue-CLI project
-```js
+``` js
 import Vue from 'vue'
 import App from './App.vue'
 import VueAutowire from 'vue-autowire'
@@ -15,19 +20,19 @@ import VueAutowire from 'vue-autowire'
 import defaultConventions from 'vue-autowire/src/conventions';
 Vue.use(VueAutowire, defaultConventions)
 
-// Use only certain assets, but with their default conventions
-import routesConventions from 'vue-autowire/src/conventions/routes';
-Vue.use(VueAutowire, routesConventions)
+// Auto wire only certain assets, but with their default conventions
+import componentsConventions from 'vue-autowire/src/conventions/components';
+Vue.use(VueAutowire, componentsConventions)
 
 // Mix and match defaults and your custom conventions
-import routesConventions from 'vue-autowire/src/conventions/routes';
-Vue.use(VueAutowire, Object.assign(routesConventions, {
-  components: {
-    // Provide your own components convention. For example:
-    // register all js/vue files inside the /components folder as components
-    requireContext: require.context('./components', true, /(\.js|\.vue)$/),
-    // do not register any as an async component
-    requireAsyncContext: null
+import componentsConventions from 'vue-autowire/src/conventions/components';
+Vue.use(VueAutowire, Object.assign(componentsConventions, {
+  views: {
+    // Provide your own views convention. For example:
+    // register all .vue files (excluding .local.vue and .async.vue) inside the /views folder as regular components
+    requireContext: require.context('./views', true, /\/(?:[^.]+|(?!\.local\.vue$)|(?!\.async\.vue$))\.vue$/),
+    // register all .async.vue files inside the /views folder as dynamic componentst
+    requireAsyncContext: require.context('./views', true, /\.async\.vue$/, 'lazy'),
   }
 }))
 
@@ -38,4 +43,4 @@ new Vue({
 }).$mount('#app')
 ```
 
-Read through the docs at https://kaizendorks.github.io/vue-autowire/ for more information on the default conventions and understand how to create your own.
+Read through the docs at https://kaizendorks.github.io/vue-autowire/ for more information about the default conventions and how to create your own.
