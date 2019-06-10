@@ -13,8 +13,8 @@ export default {
       '@/filters',
       // recursive
       true,
-      // include all .js files
-      /\.js$/,
+      // include all .js except ones ending in .local.js
+      /\/(?:[^.]+|(?!\.local\.js$))\.js$/
     ),
   }
 };

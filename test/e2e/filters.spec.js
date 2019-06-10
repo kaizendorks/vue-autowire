@@ -10,4 +10,8 @@ describe('Vue-Autowire filter registration', () => {
   it('autowired the filters test component and applies it correctly', async () => {
     await expect(page).toMatchElement('#value-after-filter', { text: 'FOO' });
   });
+
+  it('does not autowire the .local filter and our value is unmodified', async () => {
+    await expect(page).toMatchElement('#value-after-local-filter', { text: 'foo' });
+  });
 });

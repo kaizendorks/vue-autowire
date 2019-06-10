@@ -1,1 +1,1 @@
-export { default as getComponentName } from './getComponentName';
+export { default as getAssetName } from './getAssetName';

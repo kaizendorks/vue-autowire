@@ -14,7 +14,7 @@ export default {
       // recursive
       true,
       // include all .js files
-      /\.js$/,
+      /\/(?:[^.]+|(?!\.local\.js$))\.js$/,
     ),
   }
 };

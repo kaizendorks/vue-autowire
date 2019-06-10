@@ -1,6 +1,6 @@
 'use strict';
 
-import { getComponentName } from './utils';
+import { getAssetName } from './utils';
 
 /**
  * Load router files
@@ -20,7 +20,7 @@ function registerRoutes (Vue, requireContext) {
 }
 
 /**
- * Load router files
+ * Load filter files
  * @param {Vue} Vue VueJS instance
  * @param {Object} requireContext Webpack's require context. See https://github.com/webpack/docs/wiki/context#context-module-api
  */
@@ -30,7 +30,7 @@ function registerFilters (Vue, requireContext) {
   const filterFiles = requireContext.keys();
 
   return filterFiles.map(file => {
-    const name = getComponentName(file);
+    const name = getAssetName(file);
     let filter = requireContext(file);
     // Unwrap "default" from ES6 module
     if (filter.hasOwnProperty('default')) filter = filter.default;
@@ -42,7 +42,7 @@ function registerFilters (Vue, requireContext) {
 }
 
 /**
- * Load router files
+ * Load directive files
  * @param {Vue} Vue VueJS instance
  * @param {Object} requireContext Webpack's require context. See https://github.com/webpack/docs/wiki/context#context-module-api
  */
@@ -52,7 +52,7 @@ function registerDirectives (Vue, requireContext) {
   const directiveFiles = requireContext.keys();
 
   return directiveFiles.map(file => {
-    const name = getComponentName(file);
+    const name = getAssetName(file);
     let directive = requireContext(file);
     // Unwrap "default" from ES6 module
     if (directive.hasOwnProperty('default')) directive = directive.default;
@@ -75,7 +75,7 @@ function registerComponents (Vue, requireContext) {
 
   // Register all of them in Vue
   return componentFiles.map(file => {
-    const name = getComponentName(file);
+    const name = getAssetName(file);
     let component = requireContext(file);
     // Unwrap "default" from ES6 module
     if (component.hasOwnProperty('default')) component = component.default;
@@ -104,7 +104,7 @@ function registerAsyncComponents (Vue, requireContext) {
 
   // Register all of them in Vue as async components. See https://vuejs.org/v2/guide/components-dynamic-async.html#Async-Components
   return componentFiles.map(file => {
-    const name = getComponentName(file);
+    const name = getAssetName(file);
     Vue.component(name, () => requireContext(file));
     // Return the registered component
     return { name, component: Vue.component(name) };
