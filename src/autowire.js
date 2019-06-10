@@ -1,6 +1,6 @@
 'use strict';
 
-import { getComponentName } from './utils';
+import { getAssetName } from './utils';
 
 /**
  * Load router files
@@ -20,6 +20,50 @@ function registerRoutes (Vue, requireContext) {
 }
 
 /**
+ * Load filter files
+ * @param {Vue} Vue VueJS instance
+ * @param {Object} requireContext Webpack's require context. See https://github.com/webpack/docs/wiki/context#context-module-api
+ */
+function registerFilters (Vue, requireContext) {
+  // Ask webpack to list the files
+  // By default require.context adds all files to the main bundle unless "lazy" mode is used
+  const filterFiles = requireContext.keys();
+
+  return filterFiles.map(file => {
+    const name = getAssetName(file);
+    let filter = requireContext(file);
+    // Unwrap "default" from ES6 module
+    if (filter.hasOwnProperty('default')) filter = filter.default;
+    Vue.filter(name, filter);
+
+    // Return the registered filter
+    return { name, filter: Vue.filter(name) };
+  });
+}
+
+/**
+ * Load directive files
+ * @param {Vue} Vue VueJS instance
+ * @param {Object} requireContext Webpack's require context. See https://github.com/webpack/docs/wiki/context#context-module-api
+ */
+function registerDirectives (Vue, requireContext) {
+  // Ask webpack to list the files
+  // By default require.context adds all files to the main bundle unless "lazy" mode is used
+  const directiveFiles = requireContext.keys();
+
+  return directiveFiles.map(file => {
+    const name = getAssetName(file);
+    let directive = requireContext(file);
+    // Unwrap "default" from ES6 module
+    if (directive.hasOwnProperty('default')) directive = directive.default;
+    Vue.directive(name, directive);
+
+    // Return the registered directive
+    return { name, directive: Vue.directive(name) };
+  });
+};
+
+/**
  * Register components files using Vue.component and requiring the file from webpack's context
  * @param {Vue} Vue VueJS instance
  * @param {Object} requireContext Webpack's require context. See https://github.com/webpack/docs/wiki/context#context-module-api
@@ -31,7 +75,7 @@ function registerComponents (Vue, requireContext) {
 
   // Register all of them in Vue
   return componentFiles.map(file => {
-    const name = getComponentName(file);
+    const name = getAssetName(file);
     let component = requireContext(file);
     // Unwrap "default" from ES6 module
     if (component.hasOwnProperty('default')) component = component.default;
@@ -60,7 +104,7 @@ function registerAsyncComponents (Vue, requireContext) {
 
   // Register all of them in Vue as async components. See https://vuejs.org/v2/guide/components-dynamic-async.html#Async-Components
   return componentFiles.map(file => {
-    const name = getComponentName(file);
+    const name = getAssetName(file);
     Vue.component(name, () => requireContext(file));
     // Return the registered component
     return { name, component: Vue.component(name) };
@@ -78,6 +122,8 @@ function autowire (Vue, conventions) {
   // to our conventions and they would ALWAYS be added to the bundles, even when users do not use them
   conventions = Object.assign({
     routes: { requireContext: null },
+    filters: { requireContext: null },
+    directives: { requireContext: null },
     components: { requireContext: null, requireAsyncContext: null },
     views: { requireContext: null, requireAsyncContext: null }
   }, conventions);
@@ -98,6 +144,12 @@ function autowire (Vue, conventions) {
       : [],
     routes: conventions.routes.requireContext
       ? registerRoutes(Vue, conventions.routes.requireContext)
+      : [],
+    filters: conventions.filters.requireContext
+      ? registerFilters(Vue, conventions.filters.requireContext)
+      : [],
+    directives: conventions.directives.requireContext
+      ? registerDirectives(Vue, conventions.directives.requireContext)
       : []
   };
 

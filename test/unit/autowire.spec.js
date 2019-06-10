@@ -8,6 +8,8 @@ describe('the VueAutowire module', () => {
   beforeEach(() => {
     mockConventions = {
       routes: { requireContext: null },
+      filters: { requireContext: null },
+      directives: { requireContext: null },
       components: { requireContext: null, requireAsyncContext: null },
       views: { requireContext: null, requireAsyncContext: null }
     };
@@ -24,6 +26,8 @@ describe('the VueAutowire module', () => {
 
     expect(mockVue.autowire).toEqual({
       routes: [],
+      filters: [],
+      directives: [],
       components: [],
       asyncComponents: [],
       views: [],
@@ -88,6 +92,158 @@ describe('the VueAutowire module', () => {
             { another: 'set of routes' }
           ],
         });
+      });
+    });
+  });
+
+  describe('when auto-wiring of filters is enabled', () => {
+    beforeEach(() => {
+      mockVue.filter = jest.fn();
+    });
+
+    test('does nothing without a filters property in the conventions', () => {
+      VueAutowire(mockVue, {});
+
+      expect(mockVue.autowire).toMatchObject({
+        filters: [],
+      });
+      expect(mockVue.filter).not.toHaveBeenCalled();
+    });
+
+    test('does nothing without a provided requireContext', () => {
+      VueAutowire(mockVue, mockConventions);
+
+      expect(mockVue.autowire).toMatchObject({
+        filters: [],
+      });
+      expect(mockVue.filter).not.toHaveBeenCalled();
+    });
+
+    describe('when a require.context is provided', () => {
+      let mockRequireContext;
+      let mockFilterFiles;
+
+      beforeEach(() => {
+        mockFilterFiles = [
+          'some/path/my-filter.js',
+          'some/other/path/another-filter.js'
+        ];
+        mockRequireContext = jest.fn();
+        mockRequireContext.keys = jest.fn().mockReturnValue(mockFilterFiles);
+
+        when(mockRequireContext).calledWith(mockFilterFiles[0]).mockReturnValue({ a: 'filter' });
+        when(mockRequireContext).calledWith(mockFilterFiles[1]).mockReturnValue({ another: 'filter' });
+      });
+
+      test('registers all the filters within Vue', () => {
+        VueAutowire(mockVue, Object.assign(mockConventions, {
+          filters: { requireContext: mockRequireContext }
+        }));
+
+        expect(mockVue.filter).toBeCalledWith('my-filter', { a: 'filter' });
+        expect(mockVue.filter).toBeCalledWith('another-filter', { another: 'filter' });
+      });
+
+      test('returns an array with all the filters that have been registered in Vue', () => {
+        when(mockVue.filter).calledWith('my-filter').mockReturnValue({ a: 'filter' });
+        when(mockVue.filter).calledWith('another-filter').mockReturnValue({ another: 'filter' });
+
+        VueAutowire(mockVue, Object.assign(mockConventions, {
+          filters: { requireContext: mockRequireContext }
+        }));
+
+        expect(mockVue.autowire).toMatchObject({
+          filters: [
+            { name: 'my-filter', filter: { a: 'filter' }},
+            { name: 'another-filter', filter: { another: 'filter' }},
+          ],
+        });
+      });
+
+      test('can unwrap the default export of ES6 files', () => {
+        when(mockRequireContext).calledWith(mockFilterFiles[0]).mockReturnValue({ default: { an: 'ES6 filter' }});
+
+        VueAutowire(mockVue, Object.assign(mockConventions, {
+          filters: { requireContext: mockRequireContext }
+        }));
+
+        expect(mockVue.filter).toBeCalledWith('my-filter', { an: 'ES6 filter' });
+      });
+    });
+  });
+
+  describe('when auto-wiring of directives is enabled', () => {
+    beforeEach(() => {
+      mockVue.directive = jest.fn();
+    });
+
+    test('does nothing without a directives property in the conventions', () => {
+      VueAutowire(mockVue, {});
+
+      expect(mockVue.autowire).toMatchObject({
+        directives: [],
+      });
+      expect(mockVue.directive).not.toHaveBeenCalled();
+    });
+
+    test('does nothing without a provided requireContext', () => {
+      VueAutowire(mockVue, mockConventions);
+
+      expect(mockVue.autowire).toMatchObject({
+        directives: [],
+      });
+      expect(mockVue.directive).not.toHaveBeenCalled();
+    });
+
+    describe('when a require.context is provided', () => {
+      let mockRequireContext;
+      let mockDirectiveFiles;
+
+      beforeEach(() => {
+        mockDirectiveFiles = [
+          'some/path/my-directive.js',
+          'some/other/path/another-directive.js'
+        ];
+        mockRequireContext = jest.fn();
+        mockRequireContext.keys = jest.fn().mockReturnValue(mockDirectiveFiles);
+
+        when(mockRequireContext).calledWith(mockDirectiveFiles[0]).mockReturnValue({ a: 'directive' });
+        when(mockRequireContext).calledWith(mockDirectiveFiles[1]).mockReturnValue({ another: 'directive' });
+      });
+
+      test('registers all the directives within Vue', () => {
+        VueAutowire(mockVue, Object.assign(mockConventions, {
+          directives: { requireContext: mockRequireContext }
+        }));
+
+        expect(mockVue.directive).toBeCalledWith('my-directive', { a: 'directive' });
+        expect(mockVue.directive).toBeCalledWith('another-directive', { another: 'directive' });
+      });
+
+      test('returns an array with all the directives that have been registered in Vue', () => {
+        when(mockVue.directive).calledWith('my-directive').mockReturnValue({ a: 'directive' });
+        when(mockVue.directive).calledWith('another-directive').mockReturnValue({ another: 'directive' });
+
+        VueAutowire(mockVue, Object.assign(mockConventions, {
+          directives: { requireContext: mockRequireContext }
+        }));
+
+        expect(mockVue.autowire).toMatchObject({
+          directives: [
+            { name: 'my-directive', directive: { a: 'directive' }},
+            { name: 'another-directive', directive: { another: 'directive' }},
+          ],
+        });
+      });
+
+      test('can unwrap the default export of ES6 files', () => {
+        when(mockRequireContext).calledWith(mockDirectiveFiles[0]).mockReturnValue({ default: { an: 'ES6 directive' }});
+
+        VueAutowire(mockVue, Object.assign(mockConventions, {
+          directives: { requireContext: mockRequireContext }
+        }));
+
+        expect(mockVue.directive).toBeCalledWith('my-directive', { an: 'ES6 directive' });
       });
     });
   });
@@ -293,6 +449,7 @@ describe('the VueAutowire module', () => {
         expect(mockVue.component).toBeCalledWith('my-view', { an: 'ES6 view' });
       });
     });
+
     describe('when a require.context for asynchronous views is provided', () => {
       let mockRequireAsyncContext;
       let mockViewFiles;
