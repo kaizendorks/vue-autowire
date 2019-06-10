@@ -8,6 +8,6 @@ describe('Vue-Autowire directive registration', () => {
   });
 
   it('our local directive is not autowired and not present on the page', async () => {
-    await !expect(page).toMatchElement('#local-directive');
+    await expect(page).not.toMatchElement('#local-directive');
   });
 });
