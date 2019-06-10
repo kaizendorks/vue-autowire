@@ -14,13 +14,13 @@ It is defined as follows:
 ```js
 {
   filters: {
-    requireContext: require.context('@/filters', true, /\.js$/)
+    requireContext: require.context('@/filters', true, /\/(?:[^.]+|(?!\.local\.js$))\.js$/)
 }
 ```
 
 Which means:
 - Assumes there is a [webpack alias](https://webpack.js.org/configuration/resolve/#resolvealias) defined as `@` which maps to the root source of the Vue application. _If you are using the Vue-CLI, this is already the case_
-- With `requireContext`, all the files inside the `@/filters` folder that end with `.js` will be found. They will be registered as Vue filters within the Vue application and included in the main bundle.
+- With `requireContext`, all the files inside the `@/filters` folder that end with `.js` but not with `.local.js` will be found. They will be registered as Vue filters within the Vue application and included in the main bundle.
 
 
 ## Example
