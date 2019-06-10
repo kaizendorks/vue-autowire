@@ -19,6 +19,16 @@ export default () => new Router({
       path: '/async-page-test',
       name: 'async-page-test',
       component: Vue.component('AsyncPageTest')
-    }
+    },
+    {
+      path: '/filters-test',
+      name: 'filters-test',
+      component: Vue.component('FiltersTest')
+    },
+    {
+      path: '/directives-test',
+      name: 'directives-test',
+      component: Vue.component('DirectivesTest')
+    },
   ]
 });

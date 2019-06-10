@@ -20,6 +20,50 @@ function registerRoutes (Vue, requireContext) {
 }
 
 /**
+ * Load router files
+ * @param {Vue} Vue VueJS instance
+ * @param {Object} requireContext Webpack's require context. See https://github.com/webpack/docs/wiki/context#context-module-api
+ */
+function registerFilters (Vue, requireContext) {
+  // Ask webpack to list the files
+  // By default require.context adds all files to the main bundle unless "lazy" mode is used
+  const filterFiles = requireContext.keys();
+
+  return filterFiles.map(file => {
+    const name = getComponentName(file);
+    let filter = requireContext(file);
+    // Unwrap "default" from ES6 module
+    if (filter.hasOwnProperty('default')) filter = filter.default;
+    Vue.filter(name, filter);
+
+    // Return the registered filter
+    return { name, filter: Vue.filter(name) };
+  });
+}
+
+/**
+ * Load router files
+ * @param {Vue} Vue VueJS instance
+ * @param {Object} requireContext Webpack's require context. See https://github.com/webpack/docs/wiki/context#context-module-api
+ */
+function registerDirectives (Vue, requireContext) {
+  // Ask webpack to list the files
+  // By default require.context adds all files to the main bundle unless "lazy" mode is used
+  const directiveFiles = requireContext.keys();
+
+  return directiveFiles.map(file => {
+    const name = getComponentName(file);
+    let directive = requireContext(file);
+    // Unwrap "default" from ES6 module
+    if (directive.hasOwnProperty('default')) directive = directive.default;
+    Vue.directive(name, directive);
+
+    // Return the registered directive
+    return { name, directive: Vue.directive(name) };
+  });
+};
+
+/**
  * Register components files using Vue.component and requiring the file from webpack's context
  * @param {Vue} Vue VueJS instance
  * @param {Object} requireContext Webpack's require context. See https://github.com/webpack/docs/wiki/context#context-module-api
@@ -78,6 +122,8 @@ function autowire (Vue, conventions) {
   // to our conventions and they would ALWAYS be added to the bundles, even when users do not use them
   conventions = Object.assign({
     routes: { requireContext: null },
+    filters: { requireContext: null },
+    directives: { requireContext: null },
     components: { requireContext: null, requireAsyncContext: null },
     views: { requireContext: null, requireAsyncContext: null }
   }, conventions);
@@ -98,6 +144,12 @@ function autowire (Vue, conventions) {
       : [],
     routes: conventions.routes.requireContext
       ? registerRoutes(Vue, conventions.routes.requireContext)
+      : [],
+    filters: conventions.filters.requireContext
+      ? registerFilters(Vue, conventions.filters.requireContext)
+      : [],
+    directives: conventions.directives.requireContext
+      ? registerDirectives(Vue, conventions.directives.requireContext)
       : []
   };
 
