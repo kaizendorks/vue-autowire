@@ -6,6 +6,7 @@ Vue Autowire is a Vue plugin with [conventions](./conventions/README.md) for aut
 - [components](./conventions/components.md)
 - [views](./conventions/views.md)
 - [directives](./conventions/directives.md)
+- [filters](./conventions/filters.md)
 - [mixins](./conventions/mixins.md)
 - [routes](./conventions/routes.md)
 

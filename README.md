@@ -7,6 +7,7 @@ Vue Autowire is a Vue plugin with conventions for automatically wiring different
 - components
 - views
 - directives
+- filters
 - mixins
 - routes
 

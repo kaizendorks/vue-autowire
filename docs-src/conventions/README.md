@@ -53,6 +53,7 @@ Vue-Autowire comes with default conventions for each of the different types of a
 - [components](./components.md)
 - [views](./views.md)
 - [directives](./directives.md)
+- [filters](./filters.md)
 - [mixins](./mixins.md)
 - [routes](./routes.md)
 
