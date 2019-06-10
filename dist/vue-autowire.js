@@ -1,5 +1,5 @@
 /*!
-  * vue-autowire v0.1.5
+  * vue-autowire v0.1.6
   * (c) 2019 Kaizen Dorks
   * @license MIT
   */
@@ -9,7 +9,7 @@
 	(global.VueAutowire = factory());
 }(this, (function () { 'use strict';
 
-function getComponentName (filePath) {
+function getAssetName (filePath) {
   var fileName = filePath.split('/').pop();
   return fileName
     .replace(/\.js$|\.vue$/, '')
@@ -34,7 +34,7 @@ function registerRoutes (Vue, requireContext) {
 }
 
 /**
- * Load router files
+ * Load filter files
  * @param {Vue} Vue VueJS instance
  * @param {Object} requireContext Webpack's require context. See https://github.com/webpack/docs/wiki/context#context-module-api
  */
@@ -44,7 +44,7 @@ function registerFilters (Vue, requireContext) {
   var filterFiles = requireContext.keys();
 
   return filterFiles.map(function (file) {
-    var name = getComponentName(file);
+    var name = getAssetName(file);
     var filter = requireContext(file);
     // Unwrap "default" from ES6 module
     if (filter.hasOwnProperty('default')) { filter = filter.default; }
@@ -56,7 +56,7 @@ function registerFilters (Vue, requireContext) {
 }
 
 /**
- * Load router files
+ * Load directive files
  * @param {Vue} Vue VueJS instance
  * @param {Object} requireContext Webpack's require context. See https://github.com/webpack/docs/wiki/context#context-module-api
  */
@@ -66,7 +66,7 @@ function registerDirectives (Vue, requireContext) {
   var directiveFiles = requireContext.keys();
 
   return directiveFiles.map(function (file) {
-    var name = getComponentName(file);
+    var name = getAssetName(file);
     var directive = requireContext(file);
     // Unwrap "default" from ES6 module
     if (directive.hasOwnProperty('default')) { directive = directive.default; }
@@ -88,7 +88,7 @@ function registerComponents (Vue, requireContext) {
 
   // Register all of them in Vue
   return componentFiles.map(function (file) {
-    var name = getComponentName(file);
+    var name = getAssetName(file);
     var component = requireContext(file);
     // Unwrap "default" from ES6 module
     if (component.hasOwnProperty('default')) { component = component.default; }
@@ -117,7 +117,7 @@ function registerAsyncComponents (Vue, requireContext) {
 
   // Register all of them in Vue as async components. See https://vuejs.org/v2/guide/components-dynamic-async.html#Async-Components
   return componentFiles.map(function (file) {
-    var name = getComponentName(file);
+    var name = getAssetName(file);
     Vue.component(name, function () { return requireContext(file); });
     // Return the registered component
     return { name: name, component: Vue.component(name) };
