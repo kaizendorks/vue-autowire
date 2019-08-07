@@ -1,5 +1,5 @@
 /*!
-  * vue-autowire v0.1.6
+  * vue-autowire v0.1.8
   * (c) 2019 Kaizen Dorks
   * @license MIT
   */
@@ -104,7 +104,7 @@ function registerComponents (Vue, requireContext) {
  */
 function registerAsyncComponents (Vue, requireContext) {
   // Make sure require.context was created with lazy mode
-  if (!requireContext.id.includes('lazy')) {
+  if (typeof requireContext.id === 'string' && !requireContext.id.includes('lazy')) {
     throw new Error('require.context for async components should be created in lazy mode. See https://github.com/webpack/docs/wiki/context#context-module-api');
   }
 
