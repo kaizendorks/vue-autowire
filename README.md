@@ -32,7 +32,7 @@ Vue.use(VueAutowire, Object.assign(componentsConventions, {
     // Provide your own views convention. For example:
     // register all .vue files (excluding .local.vue and .async.vue) inside the /views folder as regular components
     requireContext: require.context('./views', true, /\/(?:[^.]+|(?!\.local\.vue$)|(?!\.async\.vue$))\.vue$/),
-    // register all .async.vue files inside the /views folder as dynamic componentst
+    // register all .async.vue files inside the /views folder as dynamic components
     requireAsyncContext: require.context('./views', true, /\.async\.vue$/, 'lazy'),
   }
 }))
