@@ -21,27 +21,33 @@ import VueAutowire from 'vue-autowire'
 import defaultConventions from 'vue-autowire/src/conventions';
 Vue.use(VueAutowire, defaultConventions)
 
-// Auto wire only certain assets, but with their default conventions
+Vue.config.productionTip = false
+
+new Vue({
+  render: h => h(App),
+}).$mount('#app')
+```
+
+Auto wire only certain assets, but with their default conventions
+
+``` js
 import componentsConventions from 'vue-autowire/src/conventions/components';
 Vue.use(VueAutowire, componentsConventions)
+```
 
-// Mix and match defaults and your custom conventions
+Mix and match defaults and your custom conventions
+
+``` js
 import componentsConventions from 'vue-autowire/src/conventions/components';
 Vue.use(VueAutowire, Object.assign(componentsConventions, {
   views: {
     // Provide your own views convention. For example:
     // register all .vue files (excluding .local.vue and .async.vue) inside the /views folder as regular components
     requireContext: require.context('./views', true, /\/(?:[^.]+|(?!\.local\.vue$)|(?!\.async\.vue$))\.vue$/),
-    // register all .async.vue files inside the /views folder as dynamic componentst
+    // register all .async.vue files inside the /views folder as dynamic components
     requireAsyncContext: require.context('./views', true, /\.async\.vue$/, 'lazy'),
   }
 }))
-
-Vue.config.productionTip = false
-
-new Vue({
-  render: h => h(App),
-}).$mount('#app')
 ```
 
 Read through the docs at https://kaizendorks.github.io/vue-autowire/ for more information about the default conventions and how to create your own.
