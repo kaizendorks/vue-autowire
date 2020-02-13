@@ -17,6 +17,8 @@ Within this call, you must provide the `convention` object that defines:
 - what file/folder name convention should be used to find them
 
 The easiest is to use the [default convention](./conventions/README.md).
+
+After the plugin is installed, you can register additional locations.
 ``` js
 import Vue from 'vue'
 import App from './App.vue'
@@ -24,6 +26,8 @@ import VueAutowire from 'vue-autowire'
 import defaultConventions from 'vue-autowire/src/conventions';
 
 Vue.use(VueAutowire, defaultConventions)
+
+Vue.autowire.registerComponents(require.context('@/newFolder/', true, /\/(?:[^.]+|(?!\.local\.vue$)|(?!\.async\.vue$))\.vue$/));
 
 new Vue({
   render: h => h(App),
