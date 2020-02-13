@@ -121,7 +121,6 @@ describe('the VueAutowire module', () => {
           routes: { requireContext: mockRequireContext }
         }));
 
-        console.log(mockVue.autowire);
         mockVue.autowire.registerRoutes(mockRequireContextNew);
 
         expect(mockVue.autowire).toMatchObject({
