@@ -183,7 +183,7 @@ function autowire (Vue, conventions) {
       this.asyncViews = assetResults.asyncViews.concat(registerAsyncComponents(Vue, requireContext));
     },
     registerRoutes: function (requireContext) {
-      this.routes = assetResults.routes.concat(registerAsyncComponents(Vue, requireContext));
+      this.routes = assetResults.routes.concat(registerRoutes(Vue, requireContext));
     },
     registerFilters: function (requireContext) {
       this.filters = assetResults.filters.concat(registerFilters(Vue, requireContext));

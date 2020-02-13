@@ -34,6 +34,11 @@ module.exports = [
     file: resolve('dist/vue-autowire.esm.js'),
     format: 'es'
   },
+  {
+    file: resolve('dist/vue-autowire.esm.min.js'),
+    format: 'es',
+    env: 'production'
+  },
 ].map(genConfig)
 
 function genConfig (opts) {
