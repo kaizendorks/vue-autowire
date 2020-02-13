@@ -1,5 +1,5 @@
 /*!
-  * vue-autowire v0.1.8
+  * vue-autowire v0.1.9
   * (c) 2020 Kaizen Dorks
   * @license MIT
   */
