@@ -24,7 +24,7 @@ describe('the VueAutowire module', () => {
   test('can be installed into the Vue object', () => {
     VueAutowire(mockVue);
 
-    expect(mockVue.autowire).toEqual({
+    expect(mockVue.autowire).toMatchObject({
       routes: [],
       filters: [],
       directives: [],
@@ -33,6 +33,13 @@ describe('the VueAutowire module', () => {
       views: [],
       asyncViews: []
     });
+    expect(mockVue.autowire.registerComponents).toBeDefined();
+    expect(mockVue.autowire.registerAsyncComponents).toBeDefined();
+    expect(mockVue.autowire.registerViews).toBeDefined();
+    expect(mockVue.autowire.registerAsyncViews).toBeDefined();
+    expect(mockVue.autowire.registerDirectives).toBeDefined();
+    expect(mockVue.autowire.registerFilters).toBeDefined();
+    expect(mockVue.autowire.registerRoutes).toBeDefined();
   });
 
   describe('when route conventions are provided', () => {
@@ -55,6 +62,9 @@ describe('the VueAutowire module', () => {
     describe('when a require.context for routes is provided', () => {
       let mockRequireContext;
       let mockRouteFiles;
+      let mockRequireContextNew;
+      let mockRouteFilesNew;
+
       beforeEach(() => {
         mockRouteFiles = [
           'some/path/my-router.js',
@@ -90,6 +100,35 @@ describe('the VueAutowire module', () => {
           routes: [
             { a: 'set of ES6 routes' },
             { another: 'set of routes' }
+          ],
+        });
+      });
+      test('can add routes in different places', () => {
+        when(mockRequireContext).calledWith(mockRouteFiles[0]).mockReturnValue({ a: 'set of routes' });
+        when(mockRequireContext).calledWith(mockRouteFiles[1]).mockReturnValue({ another: 'set of routes' });
+
+        mockRouteFilesNew = [
+          'other/path/my-router.js',
+          'other/other/path/another-router.js'
+        ];
+        mockRequireContextNew = jest.fn();
+        mockRequireContextNew.keys = jest.fn().mockReturnValue(mockRouteFilesNew);
+
+        when(mockRequireContextNew).calledWith(mockRouteFilesNew[0]).mockReturnValue({ a: 'new set of routes' });
+        when(mockRequireContextNew).calledWith(mockRouteFilesNew[1]).mockReturnValue({ another: 'new set of routes' });
+
+        VueAutowire(mockVue, Object.assign(mockConventions, {
+          routes: { requireContext: mockRequireContext }
+        }));
+
+        mockVue.autowire.registerRoutes(mockRequireContextNew);
+
+        expect(mockVue.autowire).toMatchObject({
+          routes: [
+            { a: 'set of routes' },
+            { another: 'set of routes' },
+            { a: 'new set of routes' },
+            { another: 'new set of routes' }
           ],
         });
       });

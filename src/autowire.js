@@ -128,8 +128,7 @@ function autowire (Vue, conventions) {
     views: { requireContext: null, requireAsyncContext: null }
   }, conventions);
 
-  // Wire every asset type for which there is a require.context provided
-  const aw = {
+  const assetResults = {
     components: conventions.components.requireContext
       ? registerComponents(Vue, conventions.components.requireContext)
       : [],
@@ -151,6 +150,38 @@ function autowire (Vue, conventions) {
     directives: conventions.directives.requireContext
       ? registerDirectives(Vue, conventions.directives.requireContext)
       : []
+  };
+
+  // Wire every asset type for which there is a require.context provided
+  const aw = {
+    components: assetResults.components,
+    asyncComponents: assetResults.asyncComponents,
+    views: assetResults.views,
+    asyncViews: assetResults.asyncViews,
+    routes: assetResults.routes,
+    filters: assetResults.filters,
+    directives: assetResults.directives,
+    registerComponents: function (requireContext) {
+      this.components = assetResults.components.concat(registerComponents(Vue, requireContext));
+    },
+    registerAsyncComponents: function (requireContext) {
+      this.asyncComponents = assetResults.asyncComponents.concat(registerAsyncComponents(Vue, requireContext));
+    },
+    registerViews: function (requireContext) {
+      this.views = assetResults.views.concat(registerComponents(Vue, requireContext));
+    },
+    registerAsyncViews: function (requireContext) {
+      this.asyncViews = assetResults.asyncViews.concat(registerAsyncComponents(Vue, requireContext));
+    },
+    registerRoutes: function (requireContext) {
+      this.routes = assetResults.routes.concat(registerRoutes(Vue, requireContext));
+    },
+    registerFilters: function (requireContext) {
+      this.filters = assetResults.filters.concat(registerFilters(Vue, requireContext));
+    },
+    registerDirectives: function (requireContext) {
+      this.directives = assetResults.directives.concat(registerDirectives(Vue, requireContext));
+    },
   };
 
   // export the results into the Vue instance, so they can be inspected
