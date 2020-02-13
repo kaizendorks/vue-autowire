@@ -167,3 +167,16 @@ Vue.use(VueAutowire, myConvention)
 ```
 
 Make sure you check webpack's documentation about [`require.context`](https://webpack.js.org/api/module-methods/#requirecontext).
+
+## Register additional elements
+
+The convention allows up to one context per asset type that will be executed initially. If you need to register additional contexts for the same asset type, you can call registration functions directly.
+```js
+Vue.autowire.registerComponents(Vue, requireContext);
+Vue.autowire.registerAsyncComponents(Vue, requireContext);
+Vue.autowire.registerViews(Vue, requireContext);
+Vue.autowire.registerAsyncViews(Vue, requireContext);
+Vue.autowire.registerRoutes(Vue, requireContext);
+Vue.autowire.registerFilters(Vue, requireContext);
+Vue.autowire.registerDirectives(Vue, requireContext);
+```

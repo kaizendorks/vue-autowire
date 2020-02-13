@@ -128,8 +128,7 @@ function autowire (Vue, conventions) {
     views: { requireContext: null, requireAsyncContext: null }
   }, conventions);
 
-  // Wire every asset type for which there is a require.context provided
-  const aw = {
+  const assetResults = {
     components: conventions.components.requireContext
       ? registerComponents(Vue, conventions.components.requireContext)
       : [],
@@ -151,6 +150,38 @@ function autowire (Vue, conventions) {
     directives: conventions.directives.requireContext
       ? registerDirectives(Vue, conventions.directives.requireContext)
       : []
+  };
+
+  // Wire every asset type for which there is a require.context provided
+  const aw = {
+    components: assetResults.components,
+    asyncComponents: assetResults.asyncComponents,
+    views: assetResults.views,
+    asyncViews: assetResults.asyncViews,
+    routes: assetResults.routes,
+    filters: assetResults.filters,
+    directives: assetResults.directives,
+    registerComponents: function (Vue, requireContext) {
+      assetResults.components = assetResults.components.concat(registerComponents(Vue, requireContext));
+    },
+    registerAsyncComponents: function (Vue, requireContext) {
+      assetResults.asyncComponents = assetResults.asyncComponents.concat(registerAsyncComponents(Vue, requireContext));
+    },
+    registerViews: function (Vue, requireContext) {
+      assetResults.views = assetResults.views.concat(registerComponents(Vue, requireContext));
+    },
+    registerAsyncViews: function (Vue, requireContext) {
+      assetResults.asyncViews = assetResults.asyncViews.concat(registerAsyncComponents(Vue, requireContext));
+    },
+    registerRoutes: function (Vue, requireContext) {
+      assetResults.routes = assetResults.routes.concat(registerRoutes(Vue, requireContext));
+    },
+    registerFilters: function (Vue, requireContext) {
+      assetResults.filters = assetResults.filters.concat(registerFilters(Vue, requireContext));
+    },
+    registerDirectives: function (Vue, requireContext) {
+      assetResults.directives = assetResults.directives.concat(registerDirectives(Vue, requireContext));
+    },
   };
 
   // export the results into the Vue instance, so they can be inspected
