@@ -162,25 +162,25 @@ function autowire (Vue, conventions) {
     filters: assetResults.filters,
     directives: assetResults.directives,
     registerComponents: function (requireContext) {
-      this.components = assetResults.components.concat(registerComponents(Vue, requireContext));
+      this.components = this.components.concat(registerComponents(Vue, requireContext));
     },
     registerAsyncComponents: function (requireContext) {
-      this.asyncComponents = assetResults.asyncComponents.concat(registerAsyncComponents(Vue, requireContext));
+      this.asyncComponents = this.asyncComponents.concat(registerAsyncComponents(Vue, requireContext));
     },
     registerViews: function (requireContext) {
-      this.views = assetResults.views.concat(registerComponents(Vue, requireContext));
+      this.views = this.views.concat(registerComponents(Vue, requireContext));
     },
     registerAsyncViews: function (requireContext) {
-      this.asyncViews = assetResults.asyncViews.concat(registerAsyncComponents(Vue, requireContext));
+      this.asyncViews = this.asyncViews.concat(registerAsyncComponents(Vue, requireContext));
     },
     registerRoutes: function (requireContext) {
-      this.routes = assetResults.routes.concat(registerRoutes(Vue, requireContext));
+      this.routes = this.routes.concat(registerRoutes(Vue, requireContext));
     },
     registerFilters: function (requireContext) {
-      this.filters = assetResults.filters.concat(registerFilters(Vue, requireContext));
+      this.filters = this.filters.concat(registerFilters(Vue, requireContext));
     },
     registerDirectives: function (requireContext) {
-      this.directives = assetResults.directives.concat(registerDirectives(Vue, requireContext));
+      this.directives = this.directives.concat(registerDirectives(Vue, requireContext));
     },
   };
 

@@ -64,6 +64,8 @@ describe('the VueAutowire module', () => {
       let mockRouteFiles;
       let mockRequireContextNew;
       let mockRouteFilesNew;
+      let mockRequireContextNew2;
+      let mockRouteFilesNew2;
 
       beforeEach(() => {
         mockRouteFiles = [
@@ -117,18 +119,31 @@ describe('the VueAutowire module', () => {
         when(mockRequireContextNew).calledWith(mockRouteFilesNew[0]).mockReturnValue({ a: 'new set of routes' });
         when(mockRequireContextNew).calledWith(mockRouteFilesNew[1]).mockReturnValue({ another: 'new set of routes' });
 
+        mockRouteFilesNew2 = [
+          'extra/path/my-router.js',
+          'extra/other/path/another-router.js'
+        ];
+        mockRequireContextNew2 = jest.fn();
+        mockRequireContextNew2.keys = jest.fn().mockReturnValue(mockRouteFilesNew2);
+
+        when(mockRequireContextNew2).calledWith(mockRouteFilesNew2[0]).mockReturnValue({ an: 'extra set of routes' });
+        when(mockRequireContextNew2).calledWith(mockRouteFilesNew2[1]).mockReturnValue({ another: 'extra set of routes' });
+
         VueAutowire(mockVue, Object.assign(mockConventions, {
           routes: { requireContext: mockRequireContext }
         }));
 
         mockVue.autowire.registerRoutes(mockRequireContextNew);
+        mockVue.autowire.registerRoutes(mockRequireContextNew2);
 
         expect(mockVue.autowire).toMatchObject({
           routes: [
             { a: 'set of routes' },
             { another: 'set of routes' },
             { a: 'new set of routes' },
-            { another: 'new set of routes' }
+            { another: 'new set of routes' },
+            { an: 'extra set of routes' },
+            { another: 'extra set of routes' }
           ],
         });
       });
