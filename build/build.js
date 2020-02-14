@@ -9,7 +9,7 @@ if (!fs.existsSync('dist')) {
   fs.mkdirSync('dist')
 }
 
-build(configs)
+build(Object.keys(configs).map(key => configs[key]))
 
 function build (builds) {
   let built = 0
@@ -31,7 +31,7 @@ function buildEntry ({ input, output }) {
   const isProd = /min\.js$/.test(file)
   return rollup.rollup(input)
     .then(bundle => bundle.generate(output))
-    .then(({ code }) => {
+    .then(({ output: [{ code }] }) => {
       if (isProd) {
         const minified = (banner ? banner + '\n' : '') + terser.minify(code, {
           toplevel: true,

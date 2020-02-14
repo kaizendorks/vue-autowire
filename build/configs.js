@@ -1,54 +1,49 @@
 const path = require('path')
 const buble = require('rollup-plugin-buble')
-const flow = require('rollup-plugin-flow-no-whitespace')
-const cjs = require('rollup-plugin-commonjs')
 const node = require('rollup-plugin-node-resolve')
 const replace = require('rollup-plugin-replace')
 const version = process.env.VERSION || require('../package.json').version
 const banner =
 `/*!
-  * vue-autowire v${version}
-  * (c) ${new Date().getFullYear()} Kaizen Dorks
-  * @license MIT
-  */`
+ * vue-autowire v${version}
+ * (c) ${new Date().getFullYear()} Kaizen Dorks
+ * @license MIT
+ */`
 
 const resolve = _path => path.resolve(__dirname, '../', _path)
 
-module.exports = [
-  // browser dev
-  {
+const configs = {
+  umdDev: {
     file: resolve('dist/vue-autowire.js'),
     format: 'umd',
     env: 'development'
   },
-  {
+  umdProd: {
     file: resolve('dist/vue-autowire.min.js'),
     format: 'umd',
     env: 'production'
   },
-  {
+  commonjs: {
     file: resolve('dist/vue-autowire.common.js'),
     format: 'cjs'
   },
-  {
+  esm: {
     file: resolve('dist/vue-autowire.esm.js'),
     format: 'es'
   },
-  {
+  'esm-prod': {
     file: resolve('dist/vue-autowire.esm.min.js'),
     format: 'es',
     env: 'production'
   },
-].map(genConfig)
+}
 
 function genConfig (opts) {
   const config = {
     input: {
       input: resolve('src/autowire.js'),
       plugins: [
-        flow(),
         node(),
-        cjs(),
         replace({
           __VERSION__: version
         })
@@ -74,3 +69,13 @@ function genConfig (opts) {
 
   return config
 }
+
+function mapValues (obj, fn) {
+  const res = {}
+  Object.keys(obj).forEach(key => {
+    res[key] = fn(obj[key], key)
+  })
+  return res
+}
+
+module.exports = mapValues(configs, genConfig)

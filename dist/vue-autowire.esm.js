@@ -1,8 +1,8 @@
 /*!
-  * vue-autowire v0.2.0
-  * (c) 2020 Kaizen Dorks
-  * @license MIT
-  */
+ * vue-autowire v0.2.0
+ * (c) 2020 Kaizen Dorks
+ * @license MIT
+ */
 function getAssetName (filePath) {
   var fileName = filePath.split('/').pop();
   return fileName
